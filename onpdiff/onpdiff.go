@@ -43,14 +43,14 @@ func OnpDiff(a []interface{}, b []interface{}, equals func(interface{}, interfac
 	m := len(a)
 	n := len(b)
 	if m <= n {
-		return doOnpDiff(a, b, m, n, equals, true)
+		return doOnpDiff(a, b, m, n, true, equals)
 	} else {
-		return doOnpDiff(b, a, n, m, equals, false)
+		return doOnpDiff(b, a, n, m, false, equals)
 	}
 }
 
-func doOnpDiff(a []interface{}, b []interface{}, m int, n int, equals func(interface{}, interface{}) bool, normal bool) *DiffInfo {
-	maxAndSnake := funcMaxAndSnake(a, b, m, n, equals, normal)
+func doOnpDiff(a []interface{}, b []interface{}, m int, n int, normal bool, equals func(interface{}, interface{}) bool) *DiffInfo {
+	maxAndSnake := funcMaxAndSnake(a, b, m, n, normal, equals)
 
 	// ////////////////////////////////////////////////////////
 	// ON(NP)アルゴリズム本体：ここから
@@ -128,7 +128,7 @@ func doOnpDiff(a []interface{}, b []interface{}, m int, n int, equals func(inter
 	return &DiffInfo{edist, ses, lcs}
 }
 
-func funcMaxAndSnake(a []interface{}, b []interface{}, m int, n int, equals func(interface{}, interface{}) bool, normal bool) func(int, *path, *path) *path {
+func funcMaxAndSnake(a []interface{}, b []interface{}, m int, n int, normal bool, equals func(interface{}, interface{}) bool) func(int, *path, *path) *path {
 	return func(k int, pt1 *path, pt2 *path) *path {
 
 		// ON(NP)アルゴリズム：max
