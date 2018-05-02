@@ -50,7 +50,7 @@ func OnpDiff(a []interface{}, b []interface{}, equals func(interface{}, interfac
 }
 
 func doOnpDiff(a []interface{}, b []interface{}, m int, n int, equals func(interface{}, interface{}) bool, normal bool) *DiffInfo {
-	maxAndSnake := funcMaxAndSnake(a, b, m, n, equals)
+	maxAndSnake := funcMaxAndSnake(a, b, m, n, equals, normal)
 
 	// ////////////////////////////////////////////////////////
 	// ON(NP)アルゴリズム本体：ここから
@@ -65,12 +65,12 @@ func doOnpDiff(a []interface{}, b []interface{}, m int, n int, equals func(inter
 	for {
 		p += 1
 		for k := -p; k < delta; k++ {
-			fp[k+offset] = maxAndSnake(k, fp[k-1+offset], fp[k+1+offset], normal)
+			fp[k+offset] = maxAndSnake(k, fp[k-1+offset], fp[k+1+offset])
 		}
 		for k := delta + p; k > delta; k-- {
-			fp[k+offset] = maxAndSnake(k, fp[k-1+offset], fp[k+1+offset], normal)
+			fp[k+offset] = maxAndSnake(k, fp[k-1+offset], fp[k+1+offset])
 		}
-		fp[delta+offset] = maxAndSnake(delta, fp[delta-1+offset], fp[delta+1+offset], normal)
+		fp[delta+offset] = maxAndSnake(delta, fp[delta-1+offset], fp[delta+1+offset])
 		if fp[delta+offset].y >= n {
 			break
 		}
@@ -128,8 +128,8 @@ func doOnpDiff(a []interface{}, b []interface{}, m int, n int, equals func(inter
 	return &DiffInfo{edist, ses, lcs}
 }
 
-func funcMaxAndSnake(a []interface{}, b []interface{}, m int, n int, equals func(interface{}, interface{}) bool) func(int, *path, *path, bool) *path {
-	return func(k int, pt1 *path, pt2 *path, normal bool) *path {
+func funcMaxAndSnake(a []interface{}, b []interface{}, m int, n int, equals func(interface{}, interface{}) bool, normal bool) func(int, *path, *path) *path {
+	return func(k int, pt1 *path, pt2 *path) *path {
 
 		// ON(NP)アルゴリズム：max
 		var (
