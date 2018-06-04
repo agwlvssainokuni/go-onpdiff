@@ -81,7 +81,7 @@ func doOnpDiff(a []interface{}, b []interface{}, m int, n int, normal bool, equa
 
 	// リストの先頭から見られるよう並べ直す。
 	l := make([]*path, 0)
-	for pt := fp[delta+offset]; pt.y >= 0; pt = pt.prev {
+	for pt := fp[delta+offset]; pt.prev != nil; pt = pt.prev {
 		l = append(l, pt)
 	}
 
