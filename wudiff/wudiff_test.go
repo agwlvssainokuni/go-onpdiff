@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package onpdiff
+package wudiff
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ import (
 )
 
 func idiff(a []interface{}, b []interface{}) *DiffInfo {
-	return OnpDiff(a, b, func(ia interface{}, ib interface{}) bool {
+	return WuDiff(a, b, func(ia interface{}, ib interface{}) bool {
 		return ia.(int) == ib.(int)
 	})
 }

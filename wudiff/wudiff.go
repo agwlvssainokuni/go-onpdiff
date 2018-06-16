@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package onpdiff
+package wudiff
 
 const (
 	DiffSame = iota
@@ -39,21 +39,21 @@ type path struct {
 	prev *path
 }
 
-func OnpDiff(a []interface{}, b []interface{}, equals func(interface{}, interface{}) bool) *DiffInfo {
+func WuDiff(a []interface{}, b []interface{}, equals func(interface{}, interface{}) bool) *DiffInfo {
 	m := len(a)
 	n := len(b)
 	if m <= n {
-		return doOnpDiff(a, b, m, n, true, equals)
+		return doWuDiff(a, b, m, n, true, equals)
 	} else {
-		return doOnpDiff(b, a, n, m, false, equals)
+		return doWuDiff(b, a, n, m, false, equals)
 	}
 }
 
-func doOnpDiff(a []interface{}, b []interface{}, m int, n int, normal bool, equals func(interface{}, interface{}) bool) *DiffInfo {
+func doWuDiff(a []interface{}, b []interface{}, m int, n int, normal bool, equals func(interface{}, interface{}) bool) *DiffInfo {
 	maxAndSnake := funcMaxAndSnake(a, b, m, n, normal, equals)
 
 	// ////////////////////////////////////////////////////////
-	// ON(NP)アルゴリズム本体：ここから
+	// Wuアルゴリズム本体：ここから
 	offset := m + 1
 	fp := make([]*path, (m+1)+(n+1)+1)
 	for k := -(m + 1); k <= (n + 1); k++ {
@@ -76,7 +76,7 @@ func doOnpDiff(a []interface{}, b []interface{}, m int, n int, normal bool, equa
 		}
 	}
 	edist := delta + 2*p
-	// ON(NP)アルゴリズム本体：ここまで
+	// Wuアルゴリズム本体：ここまで
 	// ////////////////////////////////////////////////////////
 
 	// リストの先頭から見られるよう並べ直す。
@@ -131,7 +131,7 @@ func doOnpDiff(a []interface{}, b []interface{}, m int, n int, normal bool, equa
 func funcMaxAndSnake(a []interface{}, b []interface{}, m int, n int, normal bool, equals func(interface{}, interface{}) bool) func(int, *path, *path) *path {
 	return func(k int, pt1 *path, pt2 *path) *path {
 
-		// ON(NP)アルゴリズム：max
+		// Wuアルゴリズム：max
 		var (
 			y  int
 			pt *path
@@ -155,7 +155,7 @@ func funcMaxAndSnake(a []interface{}, b []interface{}, m int, n int, normal bool
 			pt = pt2
 		}
 
-		// ON(NP)アルゴリズム：snake
+		// Wuアルゴリズム：snake
 		x := y - k
 		for x < m && y < n && equals(a[x], b[y]) {
 			x += 1
